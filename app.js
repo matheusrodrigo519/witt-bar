@@ -129,7 +129,7 @@
   }
   function showQuote(scroll=true){
     const message=buildMessage();$('#quote-preview').textContent=message;
-    $('#prepared-whatsapp').href=`https://wa.me/5548996061098?text=${encodeURIComponent(message)}`;
+    $('#prepared-whatsapp').href=`https://wa.me/5548996051098?text=${encodeURIComponent(message)}`;
     form.hidden=true;$('#quote-ready').hidden=false;
     if(scroll){$('#quote-ready').scrollIntoView({behavior:motionPaused?'instant':'smooth',block:'center'});$('#prepared-whatsapp').focus({preventScroll:true});}
   }

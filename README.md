@@ -10,7 +10,7 @@ Site de apresentação do Witt Bar, com atendimento de bar de drinks em domicíl
 - Cardápio por categoria, incluindo opções sem álcool.
 - Seleção de drinks para o orçamento.
 - Formulário com data, local, ocasião e quantidade de convidados.
-- Mensagem preparada para o WhatsApp de teste (48) 99606-1098.
+- Mensagem preparada para o WhatsApp de teste (48) 99605-1098.
 - Respeito à preferência de movimento reduzido e controle para pausar efeitos.
 
 ## Estrutura
