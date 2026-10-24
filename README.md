@@ -27,4 +27,4 @@ O pedido prepara uma mensagem; a data só é reservada após confirmação com a
 
 ## Conteúdo visual
 
-Logo oficial e cardápio fornecidos pelo solicitante. Fotos da galeria: perfil público https://www.instagram.com/wittbar/. Composição de drinks ilustrativa criada com ImageGen. Os direitos de marca e das fotografias permanecem com seus respectivos titulares.
+Logo oficial e cardápio fornecidos pelo solicitante. Fotos da galeria: perfil público https://www.instagram.com/wittbar/. Composição de drinks utilizada como ilustração de apoio, sem representar fotografia de um serviço real. Os direitos de marca e das fotografias permanecem com seus respectivos titulares.
