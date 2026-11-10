@@ -10,7 +10,7 @@ Site de apresentação do Witt Bar, com atendimento de bar de drinks em domicíl
 - Cardápio por categoria, incluindo opções sem álcool.
 - Seleção de drinks para o orçamento.
 - Formulário com data, local, ocasião e quantidade de convidados.
-- Mensagem preparada para o WhatsApp (48) 9829-2684.
+- Mensagem preparada para o WhatsApp (48) 99829-2684.
 - Respeito à preferência de movimento reduzido e controle para pausar efeitos.
 
 ## Estrutura

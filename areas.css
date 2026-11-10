@@ -232,7 +232,6 @@
   .dialog-actions > a { margin-top: 0; }
 }
 
-html:not(.js) #quote-form { display: none; }
 
 /* Keep the form comfortable to read and use on smaller screens. */
 .field > label { font-size: 13px; }

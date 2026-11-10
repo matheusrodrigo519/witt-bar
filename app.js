@@ -65,6 +65,7 @@
   const selectedDrinks = $('#selected-drinks');
   const quoteForm = $('#quote-form');
   const quoteReady = $('#quote-ready');
+  const planField = $('#service-plan');
   const toastElement = $('.toast');
   let toastTimeout;
 
@@ -289,13 +290,18 @@
       'Olá, Witt Bar! Quero um orçamento para a minha festa.',
       '',
       'Nome: ' + String(data.get('name')).trim(),
-      'Ocasião: ' + data.get('event'),
+      'Ocasião: ' + data.get('event')
+    ];
+    if (planField?.value) {
+      lines.push('Formato de bar: ' + planField.selectedOptions[0].textContent);
+    }
+    lines.push(
       'Convidados: ' + data.get('guests'),
       'Data: ' + eventDate,
       'Local: ' + String(data.get('place')).trim(),
       '',
       'Drinks de interesse: ' + (favorites.size ? [...favorites].join(', ') : 'Gostaria de ajuda para escolher.')
-    ];
+    );
     const message = String(data.get('message') || '').trim();
     if (message) lines.push('', 'Mais detalhes: ' + message);
     lines.push('', 'Podemos conversar sobre a disponibilidade e o que está incluído?');
@@ -306,7 +312,7 @@
     const message = buildMessage();
     const whatsapp = $('#prepared-whatsapp');
     $('#quote-preview').textContent = message;
-    whatsapp.href = 'https://wa.me/554898292684?text=' + encodeURIComponent(message);
+    whatsapp.href = 'https://wa.me/5548998292684?text=' + encodeURIComponent(message);
     quoteForm.hidden = true;
     quoteReady.hidden = false;
     if (scroll) {
@@ -347,11 +353,15 @@
       });
     });
 
-    for (const link of $$('[data-event]')) {
+    for (const link of $$('[data-event], [data-service-plan]')) {
       link.addEventListener('click', () => {
         quoteForm.hidden = false;
         quoteReady.hidden = true;
-        eventField.value = link.dataset.event;
+        if (link.dataset.servicePlan && planField) {
+          planField.value = link.dataset.servicePlan;
+        } else if (link.dataset.event) {
+          eventField.value = link.dataset.event;
+        }
       });
     }
     quoteForm.addEventListener('submit', event => {
