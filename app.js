@@ -6,20 +6,6 @@
   const $$ = (selector, context = document) => [...context.querySelectorAll(selector)];
   root.classList.add('js');
 
-  if ($('.home-discover')) {
-    const oldLinks = {
-      '#cardapio': 'produtos.html#cardapio',
-      '#galeria': 'festas.html#galeria',
-      '#orcamento': 'festas.html#orcamento'
-    };
-    const followOldLink = () => {
-      const target = oldLinks[location.hash];
-      if (target) location.replace(target);
-    };
-    followOldLink();
-    window.addEventListener('hashchange', followOldLink);
-  }
-
   const icons = {
     plus: '<svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-plus"/></svg>',
     check: '<svg class="icon" aria-hidden="true"><use href="assets/icons.svg#i-check"/></svg>',
@@ -49,7 +35,7 @@
   };
 
   const favoritesKey = 'wittbar:drinks';
-  const draftKey = 'wittbar:orcamento';
+  const draftKey = $('.home-discover') ? 'wittbar:orcamento-inicio' : 'wittbar:orcamento';
   function readSession(key) {
     try {
       return JSON.parse(sessionStorage.getItem(key));
@@ -241,7 +227,7 @@
     const caption = $('#gallery-dialog-caption');
     const source = $('#gallery-dialog-source');
     const paging = $('.dialog-paging', photoDialog);
-    const count = $('.dialog-count', paging);
+    const count = paging?.querySelector('.dialog-count');
     let photos = [];
     let photoIndex = 0;
 
@@ -253,8 +239,10 @@
       source.hidden = !photo.dataset.post;
       if (photo.dataset.post) source.href = photo.dataset.post;
       else source.removeAttribute('href');
-      paging.hidden = photos.length < 2;
-      count.textContent = (photoIndex + 1) + ' / ' + photos.length;
+      if (paging) {
+        paging.hidden = photos.length < 2;
+        count.textContent = (photoIndex + 1) + ' / ' + photos.length;
+      }
     }
 
     function stepPhoto(delta) {
@@ -265,7 +253,8 @@
 
     for (const button of $$('.gallery-photo')) {
       button.addEventListener('click', () => {
-        photos = $$('.gallery-photo', button.closest('.photo-collection'));
+        const collection = button.closest('.photo-collection');
+        photos = collection ? $$('.gallery-photo', collection) : [button];
         photoIndex = photos.indexOf(button);
         renderPhoto();
         photoDialog.showModal();
@@ -276,7 +265,7 @@
       button.addEventListener('click', () => stepPhoto(Number(button.dataset.photoStep)));
     }
     photoDialog.addEventListener('keydown', event => {
-      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      if (photos.length > 1 && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
         event.preventDefault();
         stepPhoto(event.key === 'ArrowLeft' ? -1 : 1);
       }
