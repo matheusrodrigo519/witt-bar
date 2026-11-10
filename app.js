@@ -13,24 +13,24 @@
   };
   const menu = {
     caipirinhas: [
-      ['Caipirinha de limão', 'O clássico brasileiro, cítrico e refrescante.'],
-      ['Caipirinha de morango', 'O sabor da fruta em um dos favoritos da festa.'],
-      ['Caipirinha de abacaxi', 'Um toque tropical para o seu brinde.'],
-      ['Caipirinha de maracujá', 'Frutado, aromático e cheio de personalidade.']
+      'Caipirinha de limão',
+      'Caipirinha de morango',
+      'Caipirinha de abacaxi',
+      'Caipirinha de maracujá'
     ],
     especiais: [
-      ['Piña Colada', 'Um clássico tropical.'],
-      ['Negroni', 'Um clássico de personalidade marcante.'],
-      ['Gin Tônica', 'Leveza e frescor na medida do seu momento.'],
-      ['Gin com energético', 'Mais uma combinação para o seu evento.'],
-      ['Moscow Mule', 'Um dos especiais do cardápio Witt.'],
-      ['Aperol Spritz', 'Vibrante, cítrico e perfeito para brindar.']
+      'Piña Colada',
+      'Negroni',
+      'Gin Tônica',
+      'Gin com energético',
+      'Moscow Mule',
+      'Aperol Spritz'
     ],
-    batidas: [['Batida de frutas com leite condensado', 'Cremosidade e frutas na sua combinação.']],
+    batidas: ['Batida de frutas com leite condensado'],
     'sem-alcool': [
-      ['Tropical sem álcool', 'Um brinde tropical, sem álcool.'],
-      ['Morango sem álcool', 'Frutado e cheio de sabor.'],
-      ['Abacaxi com hortelã sem álcool', 'Uma combinação refrescante para celebrar.']
+      'Tropical sem álcool',
+      'Morango sem álcool',
+      'Abacaxi com hortelã sem álcool'
     ]
   };
 
@@ -52,7 +52,7 @@
     }
   }
 
-  const drinkNames = new Set(Object.values(menu).flat().map(([name]) => name));
+  const drinkNames = new Set(Object.values(menu).flat());
   function readFavorites() {
     const stored = readSession(favoritesKey);
     return new Set(Array.isArray(stored) ? stored.filter(name => drinkNames.has(name)) : []);
@@ -86,22 +86,18 @@
 
   function renderMenu(category) {
     menuList.replaceChildren();
-    for (const [name, description] of menu[category]) {
+    for (const name of menu[category]) {
       const item = document.createElement('div');
       item.className = 'menu-item';
-      const copy = document.createElement('div');
       const title = document.createElement('h4');
       title.textContent = name;
-      const subtitle = document.createElement('p');
-      subtitle.textContent = description;
-      copy.append(title, subtitle);
 
       const button = document.createElement('button');
       button.type = 'button';
       button.className = 'round-button add-drink';
       button.dataset.drink = name;
       updateDrinkButton(button);
-      item.append(copy, button);
+      item.append(title, button);
       menuList.append(item);
     }
   }
@@ -325,6 +321,8 @@
     const date = $('#date');
     const noDate = $('#no-date');
     const eventField = $('#event');
+    const guestsField = $('#guests');
+    const estimate = $('#estimate-guests');
     const formatter = new Intl.DateTimeFormat('sv-SE', {
       timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit'
     });
@@ -346,6 +344,38 @@
     }
     updateDate();
     noDate.addEventListener('change', updateDate);
+
+    if (estimate) {
+      const total = $('#estimate-total');
+      const error = $('#estimate-error');
+      const currency = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+      const minPerGuest = 48;
+      const maxPerGuest = 92;
+
+      function updateEstimate() {
+        const valid = estimate.validity.valid;
+        const count = estimate.valueAsNumber;
+        total.value = valid
+          ? currency.format(count * minPerGuest) + ' a\u00a0' + currency.format(count * maxPerGuest)
+          : '—';
+        estimate.setAttribute('aria-invalid', String(!valid));
+        error.hidden = valid;
+      }
+
+      if (guestsField.value) estimate.value = guestsField.value;
+      updateEstimate();
+      estimate.addEventListener('input', () => {
+        guestsField.value = estimate.validity.valid ? String(estimate.valueAsNumber) : '';
+        quoteForm.hidden = false;
+        quoteReady.hidden = true;
+        updateEstimate();
+      });
+      guestsField.addEventListener('input', () => {
+        estimate.value = guestsField.value;
+        updateEstimate();
+      });
+    }
+
     window.addEventListener('pagehide', () => {
       writeSession(draftKey, {
         fields: Object.fromEntries(new FormData(quoteForm)),
@@ -359,6 +389,7 @@
         quoteReady.hidden = true;
         if (link.dataset.servicePlan && planField) {
           planField.value = link.dataset.servicePlan;
+          if (estimate?.validity.valid) guestsField.value = String(estimate.valueAsNumber);
         } else if (link.dataset.event) {
           eventField.value = link.dataset.event;
         }

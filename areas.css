@@ -250,7 +250,6 @@
 .selected-label > a, .selected-chip { font-size: 11px; }
 .form-intro p, .selected-drinks-box > p, .form-note { color: #bba6b0; }
 .menu-item h4 { font-size: 15px; }
-.menu-item p { font-size: 12px; }
 #gallery-dialog-image { max-height: min(73vh, calc(92dvh - 105px)); }
 @media (max-width: 700px) {
   .field input, .field select, .field textarea { font-size: 16px; }
